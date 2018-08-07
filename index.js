@@ -23,7 +23,7 @@ ws.on('message', function incoming(data) {
   client.send(`{
     data: {
       type: chat,
-      value: ${data}
+      value: '${data}'
     }
   }`);
 });
@@ -33,7 +33,7 @@ setInterval(() => {
     client.send(`{
       data: {
         type: 'timer',
-        value: ${new Date().toTimeString()}
+        value: '${new Date().toTimeString()}'
       }
     }`);
   });
