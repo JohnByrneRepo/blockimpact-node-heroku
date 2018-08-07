@@ -1,17 +1,45 @@
 <html>
-<head>
-</head>
-<body>
-Server time:
-<div id="server-time"></div>
-<script>
-var HOST = location.origin.replace(/^http/, 'ws')
-var ws = new WebSocket(HOST);
-var el = document.getElementById('server-time');
+  <head>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
-ws.onmessage = function (event) {
-  el.innerHTML = 'Server time: ' + event.data;
-};
-</script>
-</body>
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <div class="row">
+      <div id="messages"></div>
+    </div>
+    <div id="server-time"></div>
+    <script>
+      $(document).ready(function() {
+        var HOST = location.origin.replace(/^http/, 'ws')
+        var ws = new WebSocket(HOST);
+        var $timerContainer = $('.server-time');
+        var $messagesContainer = $('.messages');
+
+        ws.onmessage = function (event) {
+          var message = JSON.parse(event.data);
+
+          switch (message.data.type) {
+            case 'timer':
+              $timerContainer.html('Server time: ' + message.data.value);
+              break;
+            case 'chatMessage':
+              $messagesContainer.append(`
+                <div class="message">
+                  ${message.data.value}
+                <div>
+              `);
+              break;
+          }
+        };
+      });
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  </body>
 </html>
