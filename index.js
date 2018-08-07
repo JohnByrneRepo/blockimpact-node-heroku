@@ -23,7 +23,7 @@ ws.on('message', function incoming(data) {
   ws.clients.forEach((client) => {
     client.send(JSON.stringify({
       data: {
-        type: 'chat',
+        type: 'chatMessage',
         value: data
       }
     }));
