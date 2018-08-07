@@ -12,7 +12,7 @@
     <div class="server-time"></div>
     <script>
       $(document).ready(function() {
-        var HOST = location.origin.replace(/^http/, 'ws')
+        var HOST = 'wss://blockimpact.herokuapp.com/'
         var ws = new WebSocket(HOST);
         var $timerContainer = $('.server-time');
         var $messagesContainer = $('.messages');
