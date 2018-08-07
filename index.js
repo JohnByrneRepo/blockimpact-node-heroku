@@ -20,21 +20,21 @@ ws.on('connection', (ws) => {
 
 ws.on('message', function incoming(data) {
   console.log(data);
-  client.send(`{
-    'data': {
-      'type': 'chat',
-      'value': '${data}'
-    }
-  }`);
+  client.send(JSON.stringify({
+    data: {
+      type: 'chat',
+      value: data
+    })
+  });
 });
 
 setInterval(() => {
   ws.clients.forEach((client) => {
-    client.send(`{
-      'data': {
-        'type': 'timer',
-        'value': '${new Date().toTimeString()}'
-      }
-    }`);
+    client.send(JSON.stringify({
+      data: {
+        type: 'timer',
+        value: new Date().toTimeString()
+      })
+    });
   });
 }, 1000);
