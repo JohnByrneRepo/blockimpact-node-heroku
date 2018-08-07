@@ -17,22 +17,22 @@
         var $timerContainer = $('.server-time');
         var $messagesContainer = $('.messages');
 
-        ws.onmessage = function (event) {
-          var message = JSON.parse(event.data);
+        // ws.onmessage = function (event) {
+        //   var message = JSON.parse(event.data);
 
-          switch (message.data.type) {
-            case 'timer':
-              $timerContainer.html('Server time: ' + message.data.value);
-              break;
-            case 'chatMessage':
-              $messagesContainer.append(`
-                <div class="message">
-                  ${message.data.value}
-                <div>
-              `);
-              break;
-          }
-        };
+        //   switch (message.data.type) {
+        //     case 'timer':
+        //       $timerContainer.html('Server time: ' + message.data.value);
+        //       break;
+        //     case 'chatMessage':
+        //       $messagesContainer.append(`
+        //         <div class="message">
+        //           ${message.data.value}
+        //         <div>
+        //       `);
+        //       break;
+        //   }
+        // };
       });
     </script>
 
