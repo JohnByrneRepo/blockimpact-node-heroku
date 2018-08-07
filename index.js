@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 5000
 //   .listen(PORT, () => console.log(`Listening on ${ PORT }`))
 
 const server = express()
-  .use((req, res) => res.sendFile(INDEX) )
+  .use((req, res) => res.sendFile('index.html') )
   .listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
 const wss = new SocketServer({ server });
