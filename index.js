@@ -11,9 +11,9 @@ const server = express()
   .use((req, res) => res.sendFile(INDEX) )
   .listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
-const wss = new SocketServer({ server });
+const ws = new SocketServer({ server });
 
-wss.on('connection', (ws) => {
+ws.on('connection', (ws) => {
   console.log('Client connected');
   ws.on('close', () => console.log('Client disconnected'));
 });
@@ -29,7 +29,7 @@ ws.on('message', function incoming(data) {
 });
 
 setInterval(() => {
-  wss.clients.forEach((client) => {
+  ws.clients.forEach((client) => {
     client.send(`{
       data: {
         type: 'timer',
