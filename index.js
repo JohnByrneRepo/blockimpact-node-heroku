@@ -24,8 +24,8 @@ ws.on('message', function incoming(data) {
     data: {
       type: 'chat',
       value: data
-    })
-  });
+    }
+  }));
 });
 
 setInterval(() => {
@@ -34,7 +34,7 @@ setInterval(() => {
       data: {
         type: 'timer',
         value: new Date().toTimeString()
-      })
-    });
+      }
+    }));
   });
 }, 1000);
