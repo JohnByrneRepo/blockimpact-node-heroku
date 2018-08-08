@@ -45,10 +45,16 @@ app.delete('/logout', (request, response) => {
   response.send({ result: 'OK', message: 'Session destroyed' });
 });
 
+
 //
 // Create HTTP server by ourselves.
 //
 const server = http.createServer(app);
+
+//
+// Start the server.
+//
+server.listen(PORT, () => console.log('Listening on ' + PORT));
 
 const wss = new WebSocket.Server({
   verifyClient: (info, done) => {
@@ -74,8 +80,3 @@ wss.on('connection', (ws, req) => {
     console.log(`WS message ${message} from user ${req.session.userId}`);
   });
 });
-
-//
-// Start the server.
-//
-server.listen(PORT, () => console.log('Listening on ' + PORT));
