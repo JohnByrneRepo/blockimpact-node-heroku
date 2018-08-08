@@ -2,6 +2,7 @@ const session = require('express-session');
 const express = require('express');
 const http = require('http');
 const uuid = require('uuid');
+const PORT = process.env.PORT || 3000;
 
 const WebSocket = require('ws');
 
@@ -77,4 +78,4 @@ wss.on('connection', (ws, req) => {
 //
 // Start the server.
 //
-server.listen(8080, () => console.log('Listening on http://localhost:8080'));
+server.listen(PORT, () => console.log('Listening on ' + PORT));
