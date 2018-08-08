@@ -1,37 +1,33 @@
 'use strict';
 
+const session = require('express-session');
 const express = require('express');
-const SocketServer = require('ws').Server;
+const http = require('http');
+const uuid = require('uuid');
+const WebSocket = require('ws');
 const path = require('path');
-const bodyParser = require('body-parser');
 const pg = require('pg');
-
-var connectionString = `postgres://faidqtllatsqwe:1a3f272127e1f071490f6f3c284f0653f55406113316aafa8d86dc1c286d8930@ec2-54-225-76-201.compute-1.amazonaws.com:5432/d9r70ap1bmoqk0`;
-
+const fs = require('fs');
 const PORT = process.env.PORT || 3000;
 const INDEX = path.join(__dirname, 'index.html');
 
+var connectionString = `postgres://faidqtllatsqwe:1a3f272127e1f071490f6f3c284f0653f55406113316aafa8d86dc1c286d8930@ec2-54-225-76-201.compute-1.amazonaws.com:5432/d9r70ap1bmoqk0`;
 
-// const { Client } = require('pg');
+const app = express();
 
-// const client = new Client({
-//   connectionString: process.env.DATABASE_URL,
-//   ssl: true,
-// });
+//
+// We need the same instance of the session parser in express and
+// WebSocket server.
+//
+const sessionParser = session({
+  saveUninitialized: false,
+  secret: '$eCuRiTy',
+  resave: false
+});
 
-// client.connect();
-
-const app = express()
-  .use(bodyParser.json())       // to support JSON-encoded bodies
-  .use(bodyParser.urlencoded({     // to support URL-encoded bodies
-    extended: true
-  }))
-  .use((req, res) => res.sendFile(INDEX) )
-  .listen(PORT, () => console.log(`Listening on ${ PORT }`));
-
-
-
-const ws = new SocketServer({ app });
+//
+// Serve static files from the 'public' folder.
+//
 
 app.post('/create-user', function(req, res) {
   var firstname = req.body.firstname,
@@ -56,6 +52,33 @@ app.post('/create-user', function(req, res) {
     });
 });
 
+app.get('/', function(request, response){
+    response.sendfile(INDEX);
+});
+
+//
+// Create HTTP server by ourselves.
+//
+const server = http.createServer(app)
+
+
+
+const wss = new WebSocket.Server({
+  verifyClient: (info, done) => {
+    console.log('Parsing session from request...');
+    sessionParser(info.req, {}, () => {
+      console.log('Session is parsed!');
+
+      //
+      // We can reject the connection by returning false to done(). For example,
+      // reject here if user is unknown.
+      //
+      done(info.req.session.userId);
+    });
+  },
+  server
+});
+
 function broadcast(data) {
   var data = JSON.parse(data).data;
   ws.clients.forEach((client) => {
@@ -69,7 +92,7 @@ function broadcast(data) {
   });
 }
 
-ws.on('connection', (ws) => {
+wss.on('connection', (ws) => {
   console.log('Client connected');
   ws.on('close', () => console.log('Client disconnected'));
 
@@ -79,14 +102,9 @@ ws.on('connection', (ws) => {
   });
 });
 
+//
+// Start the server.
+//
 
-// setInterval(() => {
-//   ws.clients.forEach((client) => {
-//     client.send(JSON.stringify({
-//       data: {
-//         type: 'timer',
-//         value: new Date().toTimeString()
-//       }
-//     }));
-//   });
-// }, 1000);
+server
+  .listen(PORT, () => console.log('Listening on http://localhost:8080'));
