@@ -18,6 +18,8 @@ app.get('/', function(req, res) {
 
 
 app.post('/create-user', function(req, res) {
+  console.log('req.body');
+  console.log(req.body);
   var firstname = req.body.firstname,
     lastname = req.body.lastname,
     id = req.body.id,
@@ -48,7 +50,7 @@ const wss = new SocketServer({ server });
 
 function broadcast(data) {
   var data = JSON.parse(data).data;
-  ws.clients.forEach((client) => {
+  wss.clients.forEach((client) => {
     client.send(JSON.stringify({
       data: {
         type: 'chatMessage',

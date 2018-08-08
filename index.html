@@ -74,8 +74,8 @@
     </div>
     <script>
       $(document).ready(function() {
-        // var HOST = 'ws://localhost:3000';
-        var HOST = 'wss://blockimpact.herokuapp.com';
+        var HOST = 'ws://localhost:3000';
+        // var HOST = 'wss://blockimpact.herokuapp.com';
         var ws = new WebSocket(HOST);
         var $timerContainer = $('.server-time');
         var $messagesContainer = $('.messages');
@@ -117,16 +117,17 @@
         });
 
         $('.create-user').on('click', function() {
-          $.post('https://blockimpact.herokuapp.com/create-user',
-            {
+          $.ajax({
+            url: 'http://blockimpact.herokuapp.com/create-user',
+            type: 'POST',
+            data: {
               firstname: $('.firstname').val(),
               lastname: $('.lastname').val(),
               id: $('.id').val(),
               email: $('.email').val()
-            }, function(result) {
-              alert('Created user');
-            }
-          )
+            },
+            contentType: 'application/json; charset=utf-8'
+          });
         });
       });
     </script>
