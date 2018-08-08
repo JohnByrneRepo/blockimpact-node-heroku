@@ -70,10 +70,10 @@
         $('button.send').on('click', function() {
           const message = $('.input').val();
           $('.input').empty();
-          websocket.send(JSON.stringify({
+          ws.send(JSON.stringify({
             data: {
               type: 'chatMessage',
-              value: data,
+              value: message,
               source: 'webInterface'
             }
           }));
