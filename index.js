@@ -49,36 +49,36 @@ app.post('/create-user', function(req, res) {
     id = req.body.id,
     email = req.body.email;
 
-    pool.connect(function (err, client, done) {
-      if (err) {
-        console.log("Can not connect to the DB" + err);
-      }
-      client.query('INSERT INTO users (firstname, lastname, id, email) values($1, $2, $3, $4)',
-        [firstname, lastname, id, email], function(err, result) {
-        done();
-        if (err) {
-          console.log(err);
-          res.status(400).send(err);
-        }
-        res.status(200).send(result.rows);
-      })
-    })
-
-    // pg.connect(connectionString, function(err,client,done) {
-    //   if(err){
-    //        console.log("not able to get connection "+ err);
-    //        res.status(400).send(err);
-    //   } 
+    // pool.connect(function (err, client, done) {
+    //   if (err) {
+    //     console.log("Can not connect to the DB" + err);
+    //   }
     //   client.query('INSERT INTO users (firstname, lastname, id, email) values($1, $2, $3, $4)',
     //     [firstname, lastname, id, email], function(err, result) {
-    //        done(); // closing the connection;
-    //        if(err){
-    //            console.log(err);
-    //            res.status(400).send(err);
-    //        }
-    //        res.status(200).send({ message: 'success' });
-    //   });
-    // });
+    //     done();
+    //     if (err) {
+    //       console.log(err);
+    //       res.status(400).send(err);
+    //     }
+    //     res.status(200).send(result.rows);
+    //   })
+    // })
+
+    pg.connect(connectionString, function(err,client,done) {
+      if(err){
+           console.log("not able to get connection "+ err);
+           res.status(400).send(err);
+      } 
+      client.query('INSERT INTO users (firstname, lastname, id, email) values($1, $2, $3, $4)',
+        [firstname, lastname, id, email], function(err, result) {
+           done(); // closing the connection;
+           if(err){
+               console.log(err);
+               res.status(400).send(err);
+           }
+           res.status(200).send({ message: 'success' });
+      });
+    });
 });
 
 
