@@ -14,11 +14,13 @@ const server = express()
 const ws = new SocketServer({ server });
 
 function broadcast(data) {
+  var data = JSON.parse(data).data;
   ws.clients.forEach((client) => {
     client.send(JSON.stringify({
       data: {
         type: 'chatMessage',
-        value: data
+        value: data.value,
+        source: data.source
       }
     }));
   });

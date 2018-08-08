@@ -2,12 +2,45 @@
   <head>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <style>
+      .container {
+        padding: 30px 200px;
+      }
+      .messages {
+        background: #ddd;
+        color: #fff;
+        font-size: 14px;
+        margin-top: 40px;
+      }
+      .message {
+        background: #000;
+        color: #fff;
+        padding: 20px;
+      }
+      .row {
+        margin-bottom: 50px;
+      }
+      button {
+        padding: 20px;
+        background: #333;
+        color: #fff;
+        border: 1px solid black;
+        border-radius: 12px;
+      }
+    </style>
   </head>
   <body>
-    <div class="row">
-      <div class="messages"></div>
+    <div class="container">
+      <div class="row">
+        <div class="messages"></div>
+        <div class="input">
+          <label>Enter message:</label>
+          <input class="input">
+          <button class="send">Send</button>
+        </div>
+      </div>
+      <div class="server-time"></div>
     </div>
-    <div class="server-time"></div>
     <script>
       $(document).ready(function() {
         var HOST = 'wss://blockimpact.herokuapp.com/'
@@ -23,14 +56,28 @@
               $timerContainer.html('Server time: ' + message.data.value);
               break;
             case 'chatMessage':
-              $messagesContainer.append(`
-                <div class="message">
-                  ${message.data.value}
-                <div>
-              `);
+              if (message.data.source === 'app') {
+                $messagesContainer.append(`
+                  <div class="message">
+                    ${message.data.value}
+                  <div>
+                `);
+              }
               break;
           }
         };
+
+        $('button.send').on('click', function() {
+          const message = $('.input').val();
+          $('.input').empty();
+          websocket.send(JSON.stringify({
+            data: {
+              type: 'chatMessage',
+              value: data,
+              source: 'webInterface'
+            }
+          }));
+        })
       });
     </script>
 
