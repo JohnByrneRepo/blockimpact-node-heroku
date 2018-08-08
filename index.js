@@ -11,6 +11,14 @@ var app = express();
 var router = express.Router();
 var port = process.env.PORT || 3000;
 
+var bodyParser = require('body-parser')
+
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// parse application/json
+app.use(bodyParser.json())
+
 //return static page with websocket client
 app.get('/', function(req, res) {
     res.sendFile(path.join(__dirname + '/index.html'));
