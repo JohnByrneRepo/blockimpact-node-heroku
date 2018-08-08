@@ -74,8 +74,14 @@
     </div>
     <script>
       $(document).ready(function() {
-        var HOST = 'ws://localhost:3000';
-        // var HOST = 'wss://blockimpact.herokuapp.com';
+        var HOST = '';
+
+        if (document.location.origin.indexOf('blockimpact') < 0) {
+          HOST = ws://localhost:3000';
+        } else {
+          HOST = 'wss://blockimpact.herokuapp.com';
+        }
+        
         var ws = new WebSocket(HOST);
         var $timerContainer = $('.server-time');
         var $messagesContainer = $('.messages');
