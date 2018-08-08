@@ -17,6 +17,7 @@
     "express": "^4.15.2",
     "express-session": "^1.15.6",
     "pg": "^7.4.3",
+    "socket.io": "^2.1.1",
     "utf-8-validate": "5.0.1",
     "ws": "6.0.0"
   },
