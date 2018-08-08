@@ -13,20 +13,24 @@ const server = express()
 
 const ws = new SocketServer({ server });
 
+function broadcast(data) {
+  ws.clients.forEach((client) => {
+    client.send(JSON.stringify({
+      data: {
+        type: 'chatMessage',
+        value: data
+      }
+    }));
+  });
+}
+
 ws.on('connection', (ws) => {
   console.log('Client connected');
   ws.on('close', () => console.log('Client disconnected'));
 
   ws.on('message', function incoming(data) {
     console.log(data);
-    ws.clients.forEach((client) => {
-      client.send(JSON.stringify({
-        data: {
-          type: 'chatMessage',
-          value: data
-        }
-      }));
-    });
+    broadcast(data);
   });
 });
 
