@@ -5,37 +5,57 @@
     <style>
       .container {
         padding: 30px 200px;
+        background: #ddd;
+        padding: 20px;
       }
       .messages {
-        background: #ddd;
         color: #fff;
         font-size: 14px;
         margin-top: 40px;
+        margin-bottom: 40px;
       }
       .message {
-        background: #000;
-        color: #fff;
-        padding: 20px;
+        color: #ddd;
+        padding: 5px;
+        background: #444;
+        border: 1px solid #777;
+        border-radius: 10px;
+        width: 100px;
+        text-align: center;
+        margin: 5px;
+
+      }
+      .us {
+        background: #eee;
+        color: #333;
+        margin-left: 40px;
       }
       .row {
         margin-bottom: 50px;
       }
       button {
-        padding: 20px;
-        background: #333;
+        padding: 10px;
+        width: 100;
+        background: #444;
         color: #fff;
         border: 1px solid black;
-        border-radius: 12px;
+        border-radius: 19px;
+      }
+      input, button, label {
+        margin: 5px;
       }
     </style>
   </head>
   <body>
     <div class="container">
+      <h3>Node chat messaging interface</h3>
       <div class="row">
         <div class="messages"></div>
         <div class="input">
           <label>Enter message:</label>
+          <br>
           <input class="input">
+          <br>
           <button class="send">Send</button>
         </div>
       </div>
@@ -68,8 +88,13 @@
         };
 
         $('button.send').on('click', function() {
-          const message = $('.input').val();
-          $('.input').empty();
+          var message = $('input.input').val();
+          $messagesContainer.append('' +
+            '<div class="message us">'
+              + message +
+            '<div>'
+          );
+          $('.input').val('');
           ws.send(JSON.stringify({
             data: {
               type: 'chatMessage',

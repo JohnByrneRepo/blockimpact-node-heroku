@@ -37,13 +37,13 @@ ws.on('connection', (ws) => {
 });
 
 
-setInterval(() => {
-  ws.clients.forEach((client) => {
-    client.send(JSON.stringify({
-      data: {
-        type: 'timer',
-        value: new Date().toTimeString()
-      }
-    }));
-  });
-}, 1000);
+// setInterval(() => {
+//   ws.clients.forEach((client) => {
+//     client.send(JSON.stringify({
+//       data: {
+//         type: 'timer',
+//         value: new Date().toTimeString()
+//       }
+//     }));
+//   });
+// }, 1000);
