@@ -117,17 +117,16 @@
         });
 
         $('.create-user').on('click', function() {
-          $.ajax({
-            url: 'create-user',
-            type: 'POST',
-            data: {
+          $.post('create-user',
+            {
               firstname: $('.firstname').val(),
               lastname: $('.lastname').val(),
               id: $('.id').val(),
               email: $('.email').val()
-            },
-            contentType: 'application/json; charset=utf-8'
-          });
+            }, function(result) {
+              alert('Created user');
+            }
+          )
         });
       });
     </script>
