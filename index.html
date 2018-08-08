@@ -118,10 +118,10 @@
         $('.create-user').on('click', function() {
           $.post('https://blockimpact.herokuapp.com/create-user',
             {
-              firstname: $('.firstname'),
-              lastname: $('.lastname'),
-              id: $('.id'),
-              email: $('.email')
+              firstname: $('.firstname').val(),
+              lastname: $('.lastname').val(),
+              id: $('.id').val(),
+              email: $('.email').val()
             }, function(result) {
               alert('Created user');
             }
