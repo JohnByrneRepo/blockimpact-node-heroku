@@ -11,10 +11,6 @@ var connectionString = `postgres://faidqtllatsqwe:1a3f272127e1f071490f6f3c284f06
 const PORT = process.env.PORT || 3000;
 const INDEX = path.join(__dirname, 'index.html');
 
-app.use(bodyParser.json());         // to support JSON-encoded bodies
-app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
-  extended: true
-}));
 
 // const { Client } = require('pg');
 
@@ -28,6 +24,12 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 const app = express()
   .use((req, res) => res.sendFile(INDEX) )
   .listen(PORT, () => console.log(`Listening on ${ PORT }`));
+
+app.use(bodyParser.json());         // to support JSON-encoded bodies
+app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+  extended: true
+}));
+
 
 const ws = new SocketServer({ app });
 
