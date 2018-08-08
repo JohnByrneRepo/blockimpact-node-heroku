@@ -43,7 +43,7 @@ app.post('/create-user', function(req, res) {
            res.status(400).send(err);
        } 
        client.query('INSERT INTO users (firstname, lastname, id, email) values($1, $2, $3, $4)',
-        [firstname, lastname, id, email]), function(err, result) {
+        [firstname, lastname, id, email], function(err, result) {
            done(); // closing the connection;
            if(err){
                console.log(err);

@@ -64,6 +64,13 @@
         </div>
       </div>
       <div class="server-time"></div>
+      <div class="new-user">
+        <input class="firstname" placeholder="firstname"><br>
+        <input class="lastname" placeholder="lastname"><br>
+        <input class="id" placeholder="id"><br>
+        <input class="email" placeholder="email"><br>
+        <button class="create-user">Create user</button>
+      </div>
     </div>
     <script>
       $(document).ready(function() {
@@ -106,7 +113,20 @@
               source: 'webInterface'
             }
           }));
-        })
+        });
+
+        $('.create-user').on('click', function() {
+          $.post('https://blockimpact.herokuapp.com/create-user',
+            {
+              firstname: $('.firstname'),
+              lastname: $('.lastname'),
+              id: $('.id'),
+              email: $('.email')
+            }, function(result) {
+              alert('Created user');
+            }
+          )
+        });
       });
     </script>
 
