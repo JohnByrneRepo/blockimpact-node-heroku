@@ -1,17 +1,21 @@
-var express = require('express')
-var ws = require('ws')
-var app = express()
 const pg = require('pg');
-const PORT = process.env.PORT || 3000;
-
 var connectionString = `postgres://faidqtllatsqwe:1a3f272127e1f071490f6f3c284f0653f55406113316aafa8d86dc1c286d8930@ec2-54-225-76-201.compute-1.amazonaws.com:5432/d9r70ap1bmoqk0`;
 
-app.get('/', function (req, res) {
-   res.sendfile(__dirname + '/index.html');
-})
-app.listen(PORT, function () {
-   console.log('app listening on port: ' + PORT)
-})
+const SocketServer = require('ws').Server;
+var express = require('express');
+var path = require('path');
+var connectedUsers = [];
+//init Express
+var app = express();
+//init Express Router
+var router = express.Router();
+var port = process.env.PORT || 3000;
+
+//return static page with websocket client
+app.get('/', function(req, res) {
+    res.sendFile(path.join(__dirname + '/index.html'));
+});
+
 
 app.post('/create-user', function(req, res) {
   var firstname = req.body.firstname,
@@ -19,12 +23,12 @@ app.post('/create-user', function(req, res) {
     id = req.body.id,
     email = req.body.email;
 
-    pg.connect(connectionString,function(err,client,done) {
-       if(err){
+    pg.connect(connectionString, function(err,client,done) {
+      if(err){
            console.log("not able to get connection "+ err);
            res.status(400).send(err);
-       } 
-       client.query('INSERT INTO users (firstname, lastname, id, email) values($1, $2, $3, $4)',
+      } 
+      client.query('INSERT INTO users (firstname, lastname, id, email) values($1, $2, $3, $4)',
         [firstname, lastname, id, email], function(err, result) {
            done(); // closing the connection;
            if(err){
@@ -32,12 +36,15 @@ app.post('/create-user', function(req, res) {
                res.status(400).send(err);
            }
            res.status(200).send({ message: 'success' });
-       });
+      });
     });
 });
 
-var WebSocketServer = require('ws').Server,
-  wss = new WebSocketServer({port: PORT});
+
+var server = app.listen(port, function () {
+    console.log('node.js static server listening on port: ' + port + ", with websockets listener")
+})
+const wss = new SocketServer({ server });
 
 function broadcast(data) {
   var data = JSON.parse(data).data;
@@ -61,4 +68,3 @@ wss.on('connection', (ws) => {
     broadcast(data);
   });
 });
-
